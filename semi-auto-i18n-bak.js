@@ -29,7 +29,7 @@ function extractChineseStrings(file, dirPath) {
 }
 
 // 替换template标签下的汉字，并直接修改原文件
-function replaceChineseInTemplate(file) {
+function replaceChineseInTemplate(file, dirPath) {
   // 读取文件内容
   const content = fs.readFileSync(file, 'utf8');
   // 定义一个正则表达式，用于匹配template标签
@@ -43,8 +43,9 @@ function replaceChineseInTemplate(file) {
   });
   // 处理所有汉字
   templateContent = templateContent.replace(chineseRegex, (match) => {
+    const relativePath = path.relative(dirPath, file).replace(/\\/g, '.').replace(path.extname(file), '');
     const pinyinKey = pinyin(match, { style: pinyin.STYLE_NORMAL }).flat().join('-');
-    return `{{ $t('${prefix}.${pinyinKey}') }}`;
+    return `{{ $t('${prefix}.${relativePath}.${pinyinKey}') }}`;
   });
   // // 定义一个正则表达式，用于匹配上一步处理后的字符串中，没有被双引号包围的部分
   // const noQuoteRegex = /(?<!")(\$t\('.*'\))(?!")/g;
@@ -67,7 +68,7 @@ function replaceChineseInTemplate(file) {
 }
 
 // 替换script标签下的汉字，并直接修改原文件
-function replaceChineseInScript(file) {
+function replaceChineseInScript(file, dirPath) {
   // 读取文件内容
   const content = fs.readFileSync(file, 'utf8');
   // 定义一个正则表达式，用于匹配script标签
@@ -81,10 +82,11 @@ function replaceChineseInScript(file) {
   });
   // 定义一个正则表达式，用于匹配被单引号包围的汉字字符串
   const singleQuoteRegex = /'([\u4e00-\u9fa5]+)'/g;
-  // 替换被单引号包围的汉字字符串，如'汉字'，替换为this.$t('${prefix}.汉字')
+  // 替换被单引号包围的汉字字符串，如'汉字'，替换为i18n.t('${prefix}.汉字')
   scriptContent = scriptContent.replace(singleQuoteRegex, (match, group) => {
+    const relativePath = path.relative(dirPath, file).replace(/\\/g, '.').replace(path.extname(file), '');
     const pinyinKey = pinyin(group, { style: pinyin.STYLE_NORMAL }).flat().join('-');
-    return `i18n.t('${prefix}.${pinyinKey}')`;
+    return `i18n.t('${prefix}.${relativePath}.${pinyinKey}')`;
   });
   // 替换原文件内容
   const newContent = content.replace(scriptRegex, `<script>${scriptContent}</script>`);
@@ -108,9 +110,9 @@ function i18nVue(dirPath) {
         // 提取汉字串
         chineseMap = { ...chineseMap, ...extractChineseStrings(filePath, dirPath) };
         // 替换template标签下的汉字
-        replaceChineseInTemplate(filePath);
+        replaceChineseInTemplate(filePath, dirPath);
         // 替换script标签下的汉字
-        replaceChineseInScript(filePath);
+        replaceChineseInScript(filePath, dirPath);
       }
     });
   }

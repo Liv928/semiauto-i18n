@@ -1,6 +1,6 @@
 <template>
   <div class="interview-info">
-    <div class="interview-info-title">{{ $t('RT.mian-shi-ji-lu') }}</div>
+    <div class="interview-info-title">{{ $t('RT.index.mian-shi-ji-lu') }}</div>
     <div v-loading="loading" class="interview-info-content">
       <div v-if="dataList.length>0">
         <div v-for="(item, i) in dataList" :key="i" class="interview-info-item">
@@ -21,9 +21,9 @@
                 <div class="step-way">{{ m_codeToName(item.interviewForm, 'INTERVIEW_FORM') }}</div>
               </div>
               <div v-show="item.selectResType!=='30'" class="top-right" style="margin-right: 20px">
-                <div v-showBtn="'HRecruitingBTN_1_4_8_1_10'" class="btn" @click="editInterview(4, item)">{{ $t('RT.cha-kan') }}</div>
-                <div v-show="enableEdit && item.status!=='90' && item.status!=='91' && item.status!=='30'" v-showBtn="'HRecruitingBTN_1_4_8_1_11'" class="btn" @click="editInterview(item.interviewClass==='1'?2:3, item)">{{ $t('RT.bian-geng-mian-shi') }}</div>
-                <div v-show="enableEdit && item.status!=='30' && item.status!=='90'" v-showBtn="'HRecruitingBTN_1_4_8_1_12'" class="btn" @click="deleteRecords(item.guid)">{{ $t('RT.shan-chu') }}</div>
+                <div v-showBtn="'HRecruitingBTN_1_4_8_1_10'" class="btn" @click="editInterview(4, item)">{{ $t('RT.index.cha-kan') }}</div>
+                <div v-show="enableEdit && item.status!=='90' && item.status!=='91' && item.status!=='30'" v-showBtn="'HRecruitingBTN_1_4_8_1_11'" class="btn" @click="editInterview(item.interviewClass==='1'?2:3, item)">{{ $t('RT.index.bian-geng-mian-shi') }}</div>
+                <div v-show="enableEdit && item.status!=='30' && item.status!=='90'" v-showBtn="'HRecruitingBTN_1_4_8_1_12'" class="btn" @click="deleteRecords(item.guid)">{{ $t('RT.index.shan-chu') }}</div>
               </div>
             </div>
             <div class="step-content-bottom">
@@ -32,27 +32,27 @@
                   <strong style="font-size: large;">{{ getLineName(item.lineCode) }}</strong>
                 </div>
                 <div class="info-block" style="width: 150px">
-                  <div style="margin-bottom: 10px">{{ $t('RT.an-pai-ren') }}：{{ item.createUserName }}</div>
-                  <div>{{ $t('RT.an-pai-shi-jian') }}：{{ formatDate(item.createTime) }}</div>
+                  <div style="margin-bottom: 10px">{{ $t('RT.index.an-pai-ren') }}：{{ item.createUserName }}</div>
+                  <div>{{ $t('RT.index.an-pai-shi-jian') }}：{{ formatDate(item.createTime) }}</div>
                 </div>
                 <div class="info-block" style="width: 140px">
-                  <div style="margin-bottom: 10px">{{ $t('RT.mian-shi-zhuang-tai') }}：{{ m_codeToName(item.status, 'INTERVIEW_STATUS') }}</div>
-                  <div v-if="item.selectResType==='30'">{{ $t('RT.hou-xuan-ren') }}{{ m_codeToName(item.selectResType, 'SELECT_RES_TYPE') }}</div>
-                  <div v-else>{{ $t('RT.hou-xuan-ren') }}{{ m_codeToName(item.signStatus, 'SIGN_STATUS') }}</div>
+                  <div style="margin-bottom: 10px">{{ $t('RT.index.mian-shi-zhuang-tai') }}：{{ m_codeToName(item.status, 'INTERVIEW_STATUS') }}</div>
+                  <div v-if="item.selectResType==='30'">{{ $t('RT.index.hou-xuan-ren') }}{{ m_codeToName(item.selectResType, 'SELECT_RES_TYPE') }}</div>
+                  <div v-else>{{ $t('RT.index.hou-xuan-ren') }}{{ m_codeToName(item.signStatus, 'SIGN_STATUS') }}</div>
                 </div>
                 <div class="info-block">
-                  {{ $t('RT.fan-kui-zhuang-tai') }}：{{ formatInterviewResult(item.interviewResult) }}
+                  {{ $t('RT.index.fan-kui-zhuang-tai') }}：{{ formatInterviewResult(item.interviewResult) }}
                 </div>
               </div>
               <div v-show="item.selectResType!=='30' && enableEdit" class="bottom-do">
-                <div v-show="compareCurrentTimeWithDateString(item.interviewDate)===0&&(item.status==='20' || item.status==='40')" v-showBtn="'HRecruitingBTN_1_4_8_1_13'" class="btn" style="color: #E42F4F ;" @click="cancelInterview(item.guid)">{{ $t('RT.qu-xiao-mian-shi') }}</div>
-                <div v-show="compareCurrentTimeWithDateString(item.interviewDate)===1&&item.status==='20'" v-showBtn="'HRecruitingBTN_1_4_8_1_14'" class="btn" @click="statusChange(item)">{{ $t('RT.wei-can-jia') }}</div>
-                <div v-show="item.status==='20'" v-showBtn="'HRecruitingBTN_1_4_8_1_15'" class="btn" @click="prompt(item.guid)">{{ $t('RT.cui-cu') }}</div>
-                <div v-show="item.status==='30'" v-showBtn="'HRecruitingBTN_1_4_8_1_16'" class="btn" @click="editFeedback({tl: '{{ $t('RT.cha-kan') }}', editFlag:false, operation: 1}, item)">{{ $t('RT.cha-kan-fan-kui') }}</div>
-                <div v-show="item.status==='30'" v-showBtn="'HRecruitingBTN_1_4_8_1_17'" class="btn" @click="editFeedback({tl: '{{ $t('RT.xiu-gai') }}', editFlag:true, operation: 2}, item)">{{ $t('RT.xiu-gai-fan-kui') }}</div>
-                <div v-show="item.status==='20'" v-showBtn="'HRecruitingBTN_1_4_8_1_18'" class="btn" @click="editFeedback({tl: '{{ $t('RT.ti-ta') }}', editFlag:true, operation: 3}, item)">{{ $t('RT.ti-ta-fan-kui') }}</div>
-                <!-- <div class="btn" @click="arrangeInterviewer(item)">{{ $t('RT.an-pai-mian-shi-guan') }}</div> -->
-                <div v-show="item.status==='40'&&item.interviewClass==='2'" v-showBtn="'HRecruitingBTN_1_4_8_1_19'" class="btn" @click="arrangeInterviewer(item)">{{ $t('RT.an-pai-mian-shi-guan') }}</div>
+                <div v-show="compareCurrentTimeWithDateString(item.interviewDate)===0&&(item.status==='20' || item.status==='40')" v-showBtn="'HRecruitingBTN_1_4_8_1_13'" class="btn" style="color: #E42F4F ;" @click="cancelInterview(item.guid)">{{ $t('RT.index.qu-xiao-mian-shi') }}</div>
+                <div v-show="compareCurrentTimeWithDateString(item.interviewDate)===1&&item.status==='20'" v-showBtn="'HRecruitingBTN_1_4_8_1_14'" class="btn" @click="statusChange(item)">{{ $t('RT.index.wei-can-jia') }}</div>
+                <div v-show="item.status==='20'" v-showBtn="'HRecruitingBTN_1_4_8_1_15'" class="btn" @click="prompt(item.guid)">{{ $t('RT.index.cui-cu') }}</div>
+                <div v-show="item.status==='30'" v-showBtn="'HRecruitingBTN_1_4_8_1_16'" class="btn" @click="editFeedback({tl: '{{ $t('RT.index.cha-kan') }}', editFlag:false, operation: 1}, item)">{{ $t('RT.index.cha-kan-fan-kui') }}</div>
+                <div v-show="item.status==='30'" v-showBtn="'HRecruitingBTN_1_4_8_1_17'" class="btn" @click="editFeedback({tl: '{{ $t('RT.index.xiu-gai') }}', editFlag:true, operation: 2}, item)">{{ $t('RT.index.xiu-gai-fan-kui') }}</div>
+                <div v-show="item.status==='20'" v-showBtn="'HRecruitingBTN_1_4_8_1_18'" class="btn" @click="editFeedback({tl: '{{ $t('RT.index.ti-ta') }}', editFlag:true, operation: 3}, item)">{{ $t('RT.index.ti-ta-fan-kui') }}</div>
+                <!-- <div class="btn" @click="arrangeInterviewer(item)">{{ $t('RT.index.an-pai-mian-shi-guan') }}</div> -->
+                <div v-show="item.status==='40'&&item.interviewClass==='2'" v-showBtn="'HRecruitingBTN_1_4_8_1_19'" class="btn" @click="arrangeInterviewer(item)">{{ $t('RT.index.an-pai-mian-shi-guan') }}</div>
               </div>
               <img
                 v-if="item.selectResType==='30'"
@@ -62,11 +62,11 @@
             </div>
             <div v-if="item.selectResType==='30'" class="more-info">
               <div class="more-info-top">
-                <span>{{ $t('RT.hou-xuan-ren-xing-ming') }}：{{ applicant.empName }}</span>
-                <span style="margin-left: 20px;">{{ $t('RT.ju-jue-shi-jian') }}：{{ formatDate(item.selectTime) }}</span>
+                <span>{{ $t('RT.index.hou-xuan-ren-xing-ming') }}：{{ applicant.empName }}</span>
+                <span style="margin-left: 20px;">{{ $t('RT.index.ju-jue-shi-jian') }}：{{ formatDate(item.selectTime) }}</span>
               </div>
               <div class="more-info-bottom">
-                <span>{{ $t('RT.ju-jue-yuan-yin') }}：{{ item.giveUpReasonName }}</span>
+                <span>{{ $t('RT.index.ju-jue-yuan-yin') }}：{{ item.giveUpReasonName }}</span>
                 <!-- {{ m_codeToName(item.selectResType, 'SELECT_RES_TYPE') }} -->
               </div>
             </div>
@@ -179,7 +179,7 @@ export default {
     },
     cancelInterview(guid) {
       this.$bxDialog(
-        i18n.t('RT.qu-xiao-mian-shi'),
+        i18n.t('RT.index.qu-xiao-mian-shi'),
         () => import('@/views/cd/candidate/src/dialogs/cancelInterviewDialog.vue'),
         {
           data: {
@@ -195,9 +195,9 @@ export default {
       )
     },
     deleteRecords(guid) {
-      this.$confirm(i18n.t('RT.que-ding-shan-chu-gai-tiao-mian-shi-ji-lu-ma'), i18n.t('RT.ti-shi'), {
-        confirmButtonText: i18n.t('RT.que-ding'),
-        cancelButtonText: i18n.t('RT.qu-xiao'),
+      this.$confirm(i18n.t('RT.index.que-ding-shan-chu-gai-tiao-mian-shi-ji-lu-ma'), i18n.t('RT.index.ti-shi'), {
+        confirmButtonText: i18n.t('RT.index.que-ding'),
+        cancelButtonText: i18n.t('RT.index.qu-xiao'),
         type: 'warning'
       }).then(() => {
         const param = {
@@ -208,21 +208,21 @@ export default {
           .then((res) => {
             this.$message({
               type: 'success',
-              message: i18n.t('RT.yi-shan-chu-gai-tiao-mian-shi-ji-lu')
+              message: i18n.t('RT.index.yi-shan-chu-gai-tiao-mian-shi-ji-lu')
             })
             this.queryInterviewRecords()
           })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: i18n.t('RT.yi-qu-xiao-shan-chu')
+          message: i18n.t('RT.index.yi-qu-xiao-shan-chu')
         })
       })
     },
     prompt(guid) {
-      this.$confirm('未到面试时间，是否确认催促?', i18n.t('RT.ti-shi'), {
-        confirmButtonText: i18n.t('RT.que-ding'),
-        cancelButtonText: i18n.t('RT.qu-xiao'),
+      this.$confirm('未到面试时间，是否确认催促?', i18n.t('RT.index.ti-shi'), {
+        confirmButtonText: i18n.t('RT.index.que-ding'),
+        cancelButtonText: i18n.t('RT.index.qu-xiao'),
         type: 'warning'
       }).then(() => {
         const param = {
@@ -230,7 +230,7 @@ export default {
           guid: guid
         }
         this.$bxDialog(
-          i18n.t('RT.cui-cu'),
+          i18n.t('RT.index.cui-cu'),
           () => import('@/views/cd/candidate/src/dialogs/promptDialog.vue'),
           {
             data: {
@@ -245,7 +245,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: i18n.t('RT.yi-qu-xiao-cui-cu')
+          message: i18n.t('RT.index.yi-qu-xiao-cui-cu')
         })
       })
     },
@@ -256,7 +256,7 @@ export default {
     editFeedback(obj, item) {
       console.log('obj operation', obj.operation)
       this.$bxDialog(
-        obj.tl + i18n.t('RT.fan-kui'),
+        obj.tl + i18n.t('RT.index.fan-kui'),
         () => import('@/views/cd/candidate/src/dialogs/itvFeedbackDialog.vue'),
         {
           data: {
@@ -276,12 +276,12 @@ export default {
     arrangeInterviewer(item) {
       if (item.interviewDate.length <= 0) {
         this.$message({
-          message: i18n.t('RT.gai-hou-xuan-ren-huan-wei-xuan-ze-mian-shi-shi-jian'),
+          message: i18n.t('RT.index.gai-hou-xuan-ren-huan-wei-xuan-ze-mian-shi-shi-jian'),
           type: 'warning'
         })
       }
       this.$bxDialog(
-        i18n.t('RT.tong-zhi-mian-shi-guan'),
+        i18n.t('RT.index.tong-zhi-mian-shi-guan'),
         () => import('@/views/cd/candidate/src/dialogs/arrangeInterviewerDialog.vue'),
         {
           data: {
@@ -316,9 +316,9 @@ export default {
     },
     formatInterviewResult(val) {
       if (val === '1') {
-        return i18n.t('RT.he-ge')
+        return i18n.t('RT.index.he-ge')
       } else if (val === '0') {
-        return i18n.t('RT.bu-he-ge')
+        return i18n.t('RT.index.bu-he-ge')
       } else {
         return '-'
       }
@@ -338,17 +338,17 @@ export default {
 
       // 比较两个日期时间
       if (interviewTime <= now) {
-        // console.log(i18n.t('RT.yi-dao-mian-shi-shi-jian'))
+        // console.log(i18n.t('RT.index.yi-dao-mian-shi-shi-jian'))
         return 1 // 已到面试时间
       } else {
-        // console.log(i18n.t('RT.wei-dao-mian-shi-shi-jian'))
+        // console.log(i18n.t('RT.index.wei-dao-mian-shi-shi-jian'))
         return 0 // 未到面试时间
       }
     },
     statusChange(item) {
-      this.$confirm('是否确定将该候选人面试状态变为未参加?', i18n.t('RT.ti-shi'), {
-        confirmButtonText: i18n.t('RT.que-ding'),
-        cancelButtonText: i18n.t('RT.qu-xiao'),
+      this.$confirm('是否确定将该候选人面试状态变为未参加?', i18n.t('RT.index.ti-shi'), {
+        confirmButtonText: i18n.t('RT.index.que-ding'),
+        cancelButtonText: i18n.t('RT.index.qu-xiao'),
         type: 'warning'
       }).then(() => {
         const param = {
@@ -359,7 +359,7 @@ export default {
           .post(applicantDetailQuery.updateInterviewStatus, param)
           .then((res) => {
             this.$message({
-              message: i18n.t('RT.yi-cheng-gong-jiang-hou-xuan-ren-mian-shi-zhuang-tai-geng-xin-wei-wei-can-jia'),
+              message: i18n.t('RT.index.yi-cheng-gong-jiang-hou-xuan-ren-mian-shi-zhuang-tai-geng-xin-wei-wei-can-jia'),
               type: 'success'
             })
             this.queryInterviewRecords()
