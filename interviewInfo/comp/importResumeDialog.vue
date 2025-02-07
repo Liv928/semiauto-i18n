@@ -3,14 +3,14 @@
     <div class="header">
       <div class="item">
         <div class="circle" :class="{active:true}">1</div>
-        <span class="process-text">{{ $t('RT.dao-ru-hou-xuan-ren-jian-li') }}</span>
+        <span class="process-text">{{ {{ $t('RT.dao-ru-hou-xuan-ren-jian-li') }} }}</span>
       </div>
       <div class="item">
         <div class="line" />
       </div>
       <div class="item">
         <div class="circle" :class="{active:importSteps==='2'}">2</div>
-        <span class="process-text">{{ $t('RT.jian-li-jie-xi-yu-lan') }}</span>
+        <span class="process-text">{{ {{ $t('RT.jian-li-jie-xi-yu-lan') }} }}</span>
       </div>
     </div>
     <div class="divider" style="margin-bottom: 14px;" />
@@ -39,14 +39,14 @@
               multiple
             >
               <i style="color: #2B78FF;" class="el-icon-upload" />
-              <div class="el-upload__text"><em>{{ $t('RT.dian-ji-shang-chuan-duo-fen-jian-li') }}</em></div>
-              <div class="el-upload__text upload-prompt">{{ $t('RT.（-ke-shang-chuan-duo-fen-jian-li-，-zhi-chi')pdf、doc、docx$t('RT.ge-shi-，-da-xiao-bu-chao-guo')10M$t('RT.）') }}</div>
+              <div class="el-upload__text"><em>{{ {{ $t('RT.dian-ji-shang-chuan-duo-fen-jian-li') }} }}</em></div>
+              <div class="el-upload__text upload-prompt">{{ {{ $t('RT.$t('RT.（')-ke-shang-chuan-duo-fen-jian-li-$t('RT.，')-zhi-chi')pdf、doc、docx$t('RT.ge-shi-$t('RT.，')-da-xiao-bu-chao-guo')10M$t('RT.$t('RT.）')') }} }}</div>
             </el-upload>
           </div>
         </div>
       </bx-filter>
-      <div class="text">{{ $t('RT.mei-you-jian-li-huo-jian-li-jie-xi-bu-cheng-gong-？-zhi-xu-lu-ru-jian-dan-de-xin-xi-jiu-ke-yi-tian-jia-hou-xuan-ren') }}</div>
-      <div class="text"> <span class="click" @click="addApplicant">{{ $t('RT.shou-dong-tian-jia-hou-xuan-ren') }}</span></div>
+      <div class="text">{{ {{ $t('RT.mei-you-jian-li-huo-jian-li-jie-xi-bu-cheng-gong-$t('RT.？')-zhi-xu-lu-ru-jian-dan-de-xin-xi-jiu-ke-yi-tian-jia-hou-xuan-ren') }} }}</div>
+      <div class="text"> <span class="click" @click="addApplicant">{{ {{ $t('RT.shou-dong-tian-jia-hou-xuan-ren') }} }}</span></div>
     </div>
     <div v-if="importSteps=='2'" class="step-two">
       <div class="top">
@@ -70,10 +70,10 @@
           <div class="content-container">
             <div class="content-tabs">
               <div class="c-tab" :class="{activetab:activeTab==='1'}" @click="tabChange">
-                {{ $t('RT.yuan-shi-jian-li') }}
+                {{ {{ $t('RT.yuan-shi-jian-li') }} }}
               </div>
               <div class="c-tab" :class="{activetab:activeTab==='2'}" @click="tabChange">
-                {{ $t('RT.biao-zhun-jian-li') }}
+                {{ {{ $t('RT.biao-zhun-jian-li') }} }}
               </div>
             </div>
             <div v-show="activeTab==='2'">
@@ -117,7 +117,7 @@
             <div class="content-tl">
               <div class="title">
                 <span class="vertical-line" />
-                <span class="title-text">{{ $t('RT.ru-ku-xin-xi') }}</span>
+                <span class="title-text">{{ {{ $t('RT.ru-ku-xin-xi') }} }}</span>
               </div>
             </div>
             <bx-filter
@@ -134,9 +134,9 @@
       </div>
     </div>
     <div class="btn-group">
-      <el-button v-if="importSteps=='1'" style="float:right;margin-right: 20px" type="primary" @click="submit">{{ $t('RT.ti-jiao') }}</el-button>
-      <el-button v-if="importSteps=='2'" style="float:right;margin-right: 20px" type="primary" @click="saveInfo">{{ $t('RT.bao-cun') }}</el-button>
-      <el-button style="float:right;margin-right: 20px" @click="cancel">{{ $t('RT.qu-xiao') }}</el-button>
+      <el-button v-if="importSteps=='1'" style="float:right;margin-right: 20px" type="primary" @click="submit">{{ {{ $t('RT.ti-jiao') }} }}</el-button>
+      <el-button v-if="importSteps=='2'" style="float:right;margin-right: 20px" type="primary" @click="saveInfo">{{ {{ $t('RT.bao-cun') }} }}</el-button>
+      <el-button style="float:right;margin-right: 20px" @click="cancel">{{ {{ $t('RT.qu-xiao') }} }}</el-button>
     </div>
   </div>
 </template>
